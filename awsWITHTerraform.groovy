@@ -10,6 +10,7 @@ pipeline{
     stages{
         stage('Checkout'){
             steps {
+                // 1.Pull terraform scripts from git
                     git url: 'https://github.com/sagarkivale101/terraformEKS.git', branch : "master"
                     sh 'ls'
                     //cd 'eks-terraform'
@@ -20,6 +21,7 @@ pipeline{
         stage('aws config'){
  
             steps{
+                // 1.Install aws cli 
                   sh "rm -rf awscliv2.zip"
                   sh "rm -rf aws"
                   sh 'curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"'
@@ -27,7 +29,9 @@ pipeline{
                   sh 'apt install sudo'
                //   sh "sudo ./aws/install"
                   sh "aws --version"
-                  sh "aws configure set aws_access_key_id 'AKIAVasdsamdbsajdjdkjas' && aws configure set aws_secret_access_key 'VkNbOXKMUasdvadsavdhgasdahdsFp5OIagsjaasd' && aws configure set region 'us-east-1'"
+                // 2.Login to aws using credentials 
+                
+                  sh "aws configure set aws_access_key_id 'awsID' && aws configure set aws_secret_access_key 'awsSecretKey' && aws configure set region 'us-east-1'"
                 
             }
         }
@@ -35,6 +39,7 @@ pipeline{
     steps {
         
     sh "ls"
+    // 1. install necessary packages depending upon 'O.S.' on which jenkins is running
            
         sh 'apt-get update'
         sh 'apt install sudo'
@@ -45,6 +50,7 @@ pipeline{
         sh "sudo mv terraform /usr/bin"
         sh "rm -rf terraform.zip"
         
+        // 2. terrafrom init, plan & apply
         sh 'terraform version'
         sh 'terraform init -no-color'
         sh 'terraform plan -no-color'
